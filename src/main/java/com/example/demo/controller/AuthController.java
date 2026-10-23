@@ -4,6 +4,7 @@ import com.example.demo.config.AuthInterceptor;
 import com.example.demo.dto.Dtos.*;
 import com.example.demo.model.*;
 import com.example.demo.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class AuthController {
 
     public AuthController(AuthService authService) { this.authService = authService; }
 
+    @Operation(security = {})
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody RegisterRequest r) {
         User u = authService.register(r);
@@ -27,6 +29,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", msg, "user", UserResponse.from(u)));
     }
 
+    @Operation(security = {})
     @PostMapping("/register/visitor")
     public ResponseEntity<Map<String, Object>> registerVisitor(@Valid @RequestBody VisitorRequest d) {
         VisitRequest v = authService.registerVisitor(d);
@@ -35,6 +38,7 @@ public class AuthController {
                 "requestId", v.getId(), "status", v.getStatus()));
     }
 
+    @Operation(security = {})
     @PostMapping("/login")
     public Map<String, Object> login(@Valid @RequestBody LoginRequest r) { return authService.login(r); }
 
